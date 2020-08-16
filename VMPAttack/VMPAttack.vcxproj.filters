@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="instruction.cpp">
+      <Filter>Instruction Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="instruction_stream.cpp">
+      <Filter>Instruction Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="arithmetic_expression.cpp">
+      <Filter>Arithmetic</Filter>
+    </ClCompile>
+    <ClCompile Include="analysis_context.cpp">
+      <Filter>Analysis</Filter>
+    </ClCompile>
+    <ClCompile Include="arithmetic_operation.cpp">
+      <Filter>Arithmetic</Filter>
+    </ClCompile>
+    <ClCompile Include="vm_bridge.cpp">
+      <Filter>VM\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="vm_handler.cpp">
+      <Filter>VM\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="disassembler.cpp">
+      <Filter>Instruction Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="vm_instance.cpp">
+      <Filter>VM\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="vm_instruction.cpp">
+      <Filter>VM\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="vmpattack.cpp">
+      <Filter>Lifter</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Instruction Parser">
+      <UniqueIdentifier>{d250c107-f315-4d93-b16b-a6d6819e66cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arithmetic">
+      <UniqueIdentifier>{34b1ee1c-bce8-477d-ae6b-3c7c6a6f4301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VM">
+      <UniqueIdentifier>{c7bc42a8-1849-48b4-ac0b-c1c57ef6d345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VM\Architecture">
+      <UniqueIdentifier>{7bb3161d-877f-467b-a0dc-0ee84775e037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VM\State">
+      <UniqueIdentifier>{e3b96949-8e01-424e-95df-c1a067e2230a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Analysis">
+      <UniqueIdentifier>{7e47b311-cfb1-4131-ab7b-426cf4c330d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lifter">
+      <UniqueIdentifier>{a65f961c-e5ec-4b40-9030-c6248e77b8bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lifter\x86">
+      <UniqueIdentifier>{aa95b3f0-4684-4867-9d8f-577e044b2003}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="instruction.hpp">
+      <Filter>Instruction Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="instruction_stream.hpp">
+      <Filter>Instruction Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="disassembler.hpp">
+      <Filter>Instruction Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="arithmetic_operation_desc.hpp">
+      <Filter>Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="arithmetic_operations.hpp">
+      <Filter>Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="arithmetic_operation.hpp">
+      <Filter>Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="arithmetic_expression.hpp">
+      <Filter>Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_context.hpp">
+      <Filter>VM\State</Filter>
+    </ClInclude>
+    <ClInclude Include="analysis_context.hpp">
+      <Filter>Analysis</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_analysis_context.hpp">
+      <Filter>Analysis</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_handler.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_instruction_desc.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_instruction_set.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_bridge.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_instruction_info.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_state.hpp">
+      <Filter>VM\State</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_instance.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="vm_instruction.hpp">
+      <Filter>VM\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="instruction_utilities.hpp">
+      <Filter>Instruction Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="vmpattack.hpp">
+      <Filter>Lifter</Filter>
+    </ClInclude>
+    <ClInclude Include="arithmetic_utilities.hpp">
+      <Filter>Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="flags.hpp">
+      <Filter>Lifter\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="vmentry.hpp">
+      <Filter>Lifter</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

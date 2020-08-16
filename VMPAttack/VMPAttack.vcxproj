@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="analysis_context.cpp" />
+    <ClCompile Include="arithmetic_expression.cpp" />
+    <ClCompile Include="arithmetic_operation.cpp" />
+    <ClCompile Include="disassembler.cpp" />
+    <ClCompile Include="instruction.cpp" />
+    <ClCompile Include="instruction_stream.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="vmpattack.cpp" />
+    <ClCompile Include="vm_bridge.cpp" />
+    <ClCompile Include="vm_handler.cpp" />
+    <ClCompile Include="vm_instance.cpp" />
+    <ClCompile Include="vm_instruction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="analysis_context.hpp" />
+    <ClInclude Include="arithmetic_expression.hpp" />
+    <ClInclude Include="arithmetic_operation.hpp" />
+    <ClInclude Include="arithmetic_operations.hpp" />
+    <ClInclude Include="arithmetic_operation_desc.hpp" />
+    <ClInclude Include="arithmetic_utilities.hpp" />
+    <ClInclude Include="disassembler.hpp" />
+    <ClInclude Include="flags.hpp" />
+    <ClInclude Include="instruction_utilities.hpp" />
+    <ClInclude Include="vmentry.hpp" />
+    <ClInclude Include="vmpattack.hpp" />
+    <ClInclude Include="vm_analysis_context.hpp" />
+    <ClInclude Include="instruction.hpp" />
+    <ClInclude Include="instruction_stream.hpp" />
+    <ClInclude Include="vm_bridge.hpp" />
+    <ClInclude Include="vm_context.hpp" />
+    <ClInclude Include="vm_handler.hpp" />
+    <ClInclude Include="vm_instance.hpp" />
+    <ClInclude Include="vm_instruction.hpp" />
+    <ClInclude Include="vm_instruction_desc.hpp" />
+    <ClInclude Include="vm_instruction_info.hpp" />
+    <ClInclude Include="vm_instruction_set.hpp" />
+    <ClInclude Include="vm_state.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{15a0b665-fd76-49ba-a346-afba31359144}</ProjectGuid>
+    <RootNamespace>VMPAttack</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\dependencies\Capstone\include;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Architecture\includes;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Common\includes;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Optimizer\includes;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-SymEx\includes;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Architecture\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Common\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Optimizer\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-SymEx\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\dependencies\Capstone\msvc\$(PlatformShortName)\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\dependencies\Capstone\include;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Architecture\includes;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Common\includes;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Optimizer\includes;$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-SymEx\includes;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Architecture\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Common\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-Optimizer\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\..\VTIL\VTIL-Core\VTIL-SymEx\$(PlatformShortName)\$(Configuration);$(SolutionDir)..\dependencies\Capstone\msvc\$(PlatformShortName)\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug (default)\_deps\capstone-src\include;$(SolutionDir)..\..\VTIL-Core\VTIL-Architecture\includes;$(SolutionDir)..\..\VTIL-Core\VTIL-Common\includes;$(SolutionDir)..\..\VTIL-Core\VTIL-Compiler\includes;$(SolutionDir)..\..\VTIL-Core\VTIL-SymEx\includes;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug (default)\_deps\keystone-src\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug\VTIL-Compiler;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug\VTIL-Common;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug\VTIL-Architecture;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug\VTIL-SymEx;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug\_deps\capstone-build;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Debug\_deps\keystone-build\llvm\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\_deps\capstone-src\include;$(SolutionDir)..\..\VTIL-Core\VTIL-Architecture\includes;$(SolutionDir)..\..\VTIL-Core\VTIL-Common\includes;$(SolutionDir)..\..\VTIL-Core\VTIL-Compiler\includes;$(SolutionDir)..\..\VTIL-Core\VTIL-SymEx\includes;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\_deps\keystone-src\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\VTIL-Compiler;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\VTIL-Common;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\VTIL-Architecture;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\VTIL-SymEx;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\_deps\capstone-build;$(SolutionDir)..\..\VTIL-Core\out\build\x64-Release\_deps\keystone-build\llvm\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions);VMPATTACK_VERBOSE_0;VMPATTACK_VERBOSE_1;VTIL_OPT_TRACE_VERBOSE</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies);VTIL-Architecture.lib;VTIL-Common.lib;VTIL-SymEx.lib;VTIL-Compiler.lib;capstone.lib;keystone.lib</AdditionalDependencies>
+      <StackReserveSize>4194304</StackReserveSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);VTIL-Architecture.lib;VTIL-Common.lib;VTIL-SymEx.lib;VTIL-Compiler.lib;capstone.lib;keystone.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
