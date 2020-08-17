@@ -1,4 +1,5 @@
 # VMPAttack
+![alt text](https://raw.githubusercontent.com/0xnobody/vmpattack/master/screenshot.png "VMPAttack")
  A Work-In-Progress VMP to VTIL lifter.
  Works for VMProtect 3.X x64.
 
