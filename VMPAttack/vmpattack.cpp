@@ -229,8 +229,8 @@ namespace vmpattack
             vtil::logger::log( "%s\n", vmp_il_text );
 #endif
 
-            if ( block->size() != 0 )
-                block->label( vmp_il_text );
+            // if ( block->size() != 0 )
+            //     block->label( vmp_il_text );
 
             // Emit VTIL.
             //
