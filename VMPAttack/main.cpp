@@ -6,6 +6,7 @@
 
 #include <vtil/compiler>
 #include <fstream>
+#include <filesystem>
 
 #pragma comment(linker, "/STACK:34359738368")
 
@@ -46,11 +47,19 @@ namespace vmpattack
 
     extern "C" int main( int argc, const char* args[])
     {
-        //vtil::debug::dump( vtil::load_routine( args[ 1 ] ) );
-        //Sleep( -1 );
+        std::filesystem::path input_file_path = { args[ 1 ] };
 
-        //read_file( "C:\\Users\\adamn\\OneDrive\\Documents\\reversing\\eft\\Dumps\\BEDaisy.sys" ); //"C:\\Users\\adamn\\OneDrive\\Documents\\reversing\\valorant\\vgk.sys" );//
-        std::vector<uint8_t> buffer = read_file( "C:\\Users\\adamn\\OneDrive\\Documents\\GitHub\\vmpattack\\vmpattack\\x64\\Release\\VMPAttack_Tester.vmp.exe" );
+        // Create an output directory.
+        //
+        std::filesystem::path output_path = input_file_path;
+        output_path.remove_filename();
+        output_path /= "VMPAttack-Output";
+
+        // Create the directory if it doesn't exist already.
+        //
+        std::filesystem::create_directory( output_path );
+
+        std::vector<uint8_t> buffer = read_file( input_file_path.string().c_str() );
 
         log<CON_GRN>( "** Loaded raw image buffer @ 0x%p of size 0x%llx\r\n", buffer.data(), buffer.size() );
 
@@ -67,36 +76,6 @@ namespace vmpattack
 
         std::vector<vtil::routine*> lifted_routines;
 
-        //auto rtn = instance.lift( { 0x773F14F9, 0x223758 } );
-        //spawn_state<optimizer::stack_pinning_pass>{}( *rtn );
-        //spawn_state<optimizer::istack_ref_substitution_pass>{}( *rtn );
-        //spawn_state<optimizer::bblock_extension_pass>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::stack_propagation_pass>>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::dead_code_elimination_pass>>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::mov_propagation_pass>>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::register_renaming_pass>>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::dead_code_elimination_pass>>{}( *rtn );
-        //spawn_state<optimizer::symbolic_rewrite_pass<1>>{}( *rtn );
-        //spawn_state<optimizer::branch_correction_pass>{}( *rtn );
-        //spawn_state<optimizer::stack_propagation_pass>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::mov_propagation_pass>>{}( *rtn );
-        //spawn_state<optimizer::local_pass<optimizer::dead_code_elimination_pass>>{}( *rtn );
-        //
-        //vtil::debug::dump( *rtn );
-        //
-        //vtil::optimizer::apply_all_profiled( *rtn );
-        //
-        //vtil::debug::dump( *rtn );
-
-        //auto block = ( *rtn )->find_block( 0x14016c147 );
-        //auto ins = std::next( block->begin(), 81 );
-        //
-        //vtil::cached_tracer tracer;
-        //
-        //tracer.rtrace_p( { ins, vtil::REG_FLAGS } );
-        //
-        //spawn_state<optimizer::mov_propagation_pass>{}( *rtn );
-
         for ( const scan_result& scan_result : scan_results )
         {
             log<CON_YLW>( "** Devirtualizing routine @ 0x%llx...\r\n", scan_result.rva );
@@ -108,30 +87,27 @@ namespace vmpattack
                 log<CON_GRN>( "\t** Lifting success\r\n" );
                 lifted_routines.push_back( *routine );
 
+                std::string save_path = vtil::format::str( "%s\\0x%llx.vtil", output_path.string().c_str(), scan_result.rva );
+                vtil::save_routine( *routine, save_path );
+
+                log<CON_GRN>( "\t** Unoptimized Saved to %s\r\n", save_path );
+
                 vtil::optimizer::apply_all_profiled( *routine );
 
                 log<CON_GRN>( "\t** Optimization success\r\n" );
 
+#ifdef _DEBUG
                 vtil::debug::dump( *routine );
+#endif
 
-                //std::string save_path = vtil::format::str( "C:\\Users\\adamn\\OneDrive\\Documents\\reversing\\eft\\Dumps\\BEDaisy-VTIL\\0x%llx.vtil", scan_result.rva );
-                //vtil::save_routine( *routine, save_path );
+                std::string optimized_save_path = vtil::format::str( "%s\\0x%llx-Optimized.vtil", output_path.string().c_str(), scan_result.rva );
+                vtil::save_routine( *routine, optimized_save_path );
 
-                //log<CON_GRN>( "\t** Saved to %s\r\n", save_path );
+                log<CON_GRN>( "\t** Optimized Saved to %s\r\n", save_path );
             }
             else
                 log<CON_RED>( "\t** Lifting failed\r\n" );
         }
-
-        for ( vtil::routine* lifted_routine : lifted_routines )
-        {
-            log<CON_YLW>( "** Optimizing routine @ 0x%llx...\r\n", lifted_routine->entry_point->entry_vip );
-
-            vtil::optimizer::apply_all( lifted_routine );
-            
-            vtil::debug::dump( lifted_routine );
-        }
-        //( *routine )->routine_convention = vtil::amd64::preserve_all_convention;
 
         system( "pause" );
     }
