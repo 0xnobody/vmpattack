@@ -123,7 +123,7 @@ namespace vmpattack
 
         // Create a new analysis context from the newly copied stream.
         //
-        analysis_context* peek_analysis_context = &analysis_context( &peek_stream );
+        analysis_context peek_analysis_context = analysis_context( &peek_stream );
 
         // The VIP is offseted by 4 at each handler; search for this so.
         //
@@ -131,7 +131,7 @@ namespace vmpattack
         x86_insn update_vip_ins;
 
         auto bridge_result = peek_analysis_context
-            ->update_reg( { update_vip_ins, false }, { vip_reg, true }, { vip_offset_size, true } );
+            .update_reg( { update_vip_ins, false }, { vip_reg, true }, { vip_offset_size, true } );
 
         // If nothing found, something went wrong; return empty {}.
         //

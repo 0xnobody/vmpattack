@@ -33,7 +33,9 @@
 
 ## Building
  Building in VS is as simple as replacing the include/library directories to VTIL/Keystone/Capstone in the vcxproj.
-
+ 
+ The project now also universally supports CMake and platforms other than Windows.
+ 
  The project requires C++20.
 
 ## Issues
