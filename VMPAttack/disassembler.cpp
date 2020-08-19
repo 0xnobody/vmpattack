@@ -98,8 +98,25 @@ namespace vmpattack
 
         // While iterative disassembly is successful.
         //
-        while ( cs_disasm_iter( handle, ( const uint8_t** )&ea, &size, &offset, insn ) )
+        while ( true )
+        {
+            // Check if we're within bounds.
+            //
+            if ( offset >= size )
+                break;
+
+            // In case disassembly failed (due to invalid instructions), try to continue by incrementing offset.
+            //
+            if ( !cs_disasm_iter( handle, ( const uint8_t** )&ea, &size, &offset, insn ) )
+            {
+                offset++;
+                ea++;
+
+                continue;
+            }
+
             instructions.push_back( std::make_unique<instruction>( insn ) );
+        }
 
         return std::move( instructions );
     }

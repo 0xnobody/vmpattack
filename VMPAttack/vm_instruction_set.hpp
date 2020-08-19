@@ -942,9 +942,15 @@ namespace vmpattack
             if ( !result )
                 return false;
 
-            info->custom_data = r1;
+            // Ensure reg is DRx or CRx.
+            //
+            if ( ( r1 >= X86_REG_DR0 && r1 <= X86_REG_DR15 ) || ( r1 >= X86_REG_CR0 && r1 <= X86_REG_CR15 ) )
+            {
+                info->custom_data = r1;
+                return true;
+            }
 
-            return true;
+            return false;
         },
 
         []( vtil::basic_block* block, const vm_instruction* instruction ) -> void
@@ -973,14 +979,15 @@ namespace vmpattack
             if ( !result )
                 return false;
 
-            // Ensure reg is DRx.
+            // Ensure reg is DRx or CRx.
             //
-            if ( r1 < X86_REG_DR0 || r1 > X86_REG_DR15 )
-                return false;
+            if ( ( r1 >= X86_REG_DR0 && r1 <= X86_REG_DR15 ) || ( r1 >= X86_REG_CR0 && r1 <= X86_REG_CR15 ) )
+            {
+                info->custom_data = r1;
+                return true;
+            }
 
-            info->custom_data = r1;
-
-            return true;
+            return false;
         },
 
         []( vtil::basic_block* block, const vm_instruction* instruction ) -> void

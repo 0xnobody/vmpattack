@@ -140,7 +140,12 @@ namespace vmpattack
         // Copy each section.
         //
         for ( const vtil::section_descriptor& section : image )
-            memcpy( &mapped_buffer[ section.virtual_address ], &image.raw_bytes[ section.physical_address ], section.physical_size );
+        {
+            // Sanity check for potentially broken PEs.
+            //
+            if ( image.raw_bytes.size() >= section.physical_address + section.physical_address )
+                memcpy( &mapped_buffer[ section.virtual_address ], &image.raw_bytes[ section.physical_address ], section.physical_size );
+        }
 
         // Copy into a vector.
         //
@@ -190,7 +195,8 @@ namespace vmpattack
 
                 // Assert that we matched a handler.
                 //
-                fassert( handler );
+                fassert( handler && "Failed to match handler. Please report this error with the target." );
+
 #ifdef _DEBUG
                 if ( !handler )
                     __debugbreak();
