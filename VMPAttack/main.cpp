@@ -1,5 +1,6 @@
-
+#ifdef _WIN32
 #include <windows.h>
+#endif
 #include <cstdint>
 
 #include "vmpattack.hpp"
@@ -8,7 +9,9 @@
 #include <fstream>
 #include <filesystem>
 
+#ifdef _MSC_VER
 #pragma comment(linker, "/STACK:34359738368")
+#endif
 
 using namespace vtil;
 using namespace vtil::optimizer;
@@ -16,9 +19,11 @@ using namespace vtil::logger;
 
 namespace vmpattack
 {
+    using std::uint8_t;
+
     // Still hate c++
     //
-    std::vector<BYTE> read_file( const char* filename )
+    std::vector<uint8_t> read_file( const char* filename )
     {
         // open the file:
         std::ifstream file( filename, std::ios::binary );
@@ -34,13 +39,13 @@ namespace vmpattack
         file.seekg( 0, std::ios::beg );
 
         // reserve capacity
-        std::vector<BYTE> vec;
+        std::vector<uint8_t> vec;
         vec.reserve( fileSize );
 
         // read the data:
         vec.insert( vec.begin(),
-                    std::istream_iterator<BYTE>( file ),
-                    std::istream_iterator<BYTE>() );
+                    std::istream_iterator<uint8_t>( file ),
+                    std::istream_iterator<uint8_t>() );
 
         return vec;
     }

@@ -1,5 +1,9 @@
 #pragma once
+#ifdef _WIN32
 #include <intrin.h>
+#else
+#include <x86intrin.h>
+#endif
 #include "arithmetic_operation_desc.hpp"
 #include "instruction.hpp"
 
@@ -19,9 +23,30 @@ namespace vmpattack
 
         // Bitwise Byte-Swaps.
         //
-        inline const arithmetic_operation_desc bswap_64 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _byteswap_uint64( d ); }, 8 };
-        inline const arithmetic_operation_desc bswap_32 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _byteswap_ulong( ( uint32_t )d ); }, 4 };
-        inline const arithmetic_operation_desc bswap_16 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _byteswap_ushort( ( uint16_t )d ); }, 2 };
+        //         inline const arithmetic_operation_desc bswap_64 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return __bswap_64( d ); }, 8 };
+        // inline const arithmetic_operation_desc bswap_32 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return __bswap_32( ( uint32_t )d ); }, 4 };
+        // inline const arithmetic_operation_desc bswap_16 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return __bswap_16( ( uint16_t )d ); }, 2 };
+        inline const arithmetic_operation_desc bswap_64 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _byteswap_uint64( d );
+#else
+            return __bswap_64( d );
+#endif
+        }, 8 };
+        inline const arithmetic_operation_desc bswap_32 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _byteswap_ulong( ( uint32_t )d );
+#else
+            return __bswap_32( ( uint32_t )d );
+#endif
+        }, 4 };
+        inline const arithmetic_operation_desc bswap_16 = { X86_INS_BSWAP,  0, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _byteswap_ushort( ( uint16_t )d );
+#else
+            return __bswap_16( ( uint16_t )d );
+#endif
+        }, 2 };
 
         // Incement / Decrement.
         //
@@ -36,17 +61,65 @@ namespace vmpattack
 
         // Left Bitwise Rotations.
         //
-        inline const arithmetic_operation_desc brol_64 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotl64( d, ( int )a[ 0 ] ); }, 8 };
-        inline const arithmetic_operation_desc brol_32 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotl( ( uint32_t )d, ( int )a[ 0 ] ); }, 4 };
-        inline const arithmetic_operation_desc brol_16 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotl16( ( uint16_t )d, ( uint8_t )a[ 0 ] ); }, 2 };
-        inline const arithmetic_operation_desc brol_8 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotl8( ( uint8_t )d, ( uint8_t )a[ 0 ] ); }, 1 };
+        inline const arithmetic_operation_desc brol_64 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotl64( d, ( int )a[ 0 ] );
+#else
+            return __rolq( d, ( int )a[ 0 ] );
+#endif
+        }, 8 };
+        inline const arithmetic_operation_desc brol_32 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotl( ( uint32_t )d, ( int )a[ 0 ] );
+#else
+            return __rold( ( uint32_t )d, ( int )a[ 0 ] );
+#endif
+        }, 4 };
+        inline const arithmetic_operation_desc brol_16 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotl16( ( uint16_t )d, ( uint8_t )a[ 0 ] );
+#else
+            return __rolw( ( uint16_t )d, ( uint8_t )a[ 0 ] );
+#endif
+        }, 2 };
+        inline const arithmetic_operation_desc brol_8 = { X86_INS_ROL,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotl8( ( uint8_t )d, ( uint8_t )a[ 0 ] );
+#else
+            return __rolb( ( uint8_t )d, ( uint8_t )a[ 0 ] );
+#endif
+        }, 1 };
 
         // Right Bitwise Rotations.
         //
-        inline const arithmetic_operation_desc bror_64 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotr64( d, ( int )a[ 0 ] ); }, 8 };
-        inline const arithmetic_operation_desc bror_32 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotr( ( uint32_t )d, ( int )a[ 0 ] ); }, 4 };
-        inline const arithmetic_operation_desc bror_16 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotr16( ( uint16_t )d, ( uint8_t )a[ 0 ] ); }, 2 };
-        inline const arithmetic_operation_desc bror_8 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t { return _rotr8( ( uint8_t )d, ( uint8_t )a[ 0 ] ); }, 1 };
+        inline const arithmetic_operation_desc bror_64 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotr64( d, ( int )a[ 0 ] );
+#else
+            return __rorq( d, ( int )a[ 0 ] );
+#endif
+        }, 8 };
+        inline const arithmetic_operation_desc bror_32 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotr( ( uint32_t )d, ( int )a[ 0 ] );
+#else
+            return __rord( ( uint32_t )d, ( int )a[ 0 ] );
+#endif
+        }, 4 };
+        inline const arithmetic_operation_desc bror_16 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotr16( ( uint16_t )d, ( uint8_t )a[ 0 ] );
+#else
+            return __rorw( ( uint16_t )d, ( uint8_t )a[ 0 ] );
+#endif
+        }, 2 };
+        inline const arithmetic_operation_desc bror_8 = { X86_INS_ROR,    1, []( uint64_t d, const uint64_t a[] ) -> uint64_t {
+#ifdef _WIN32
+            return _rotr8( ( uint8_t )d, ( uint8_t )a[ 0 ] );
+#else
+            return __rorb( ( uint8_t )d, ( uint8_t )a[ 0 ] );
+#endif
+        }, 1 };
 
         // List of all operation descriptors.
         //

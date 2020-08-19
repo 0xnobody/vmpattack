@@ -7,7 +7,7 @@ namespace vmpattack
     template <typename T>
     inline T dynamic_size_cast( T value, size_t bytes )
     {
-        if ( bytes == sizeof T )
+        if ( bytes == sizeof( T ) )
             return value;
 
         T mask = ( 1ull << ( bytes * 8ull ) ) - 1ull;
