@@ -21,9 +21,9 @@ struct much_complex_object
 };
 #pragma pack(pop)
 
-int main()
+int main( int argc, const char* args[] )
 {
-	char r = getchar();
+	
 
 	while ( r >= 0x50 )
 	{

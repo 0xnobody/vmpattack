@@ -143,7 +143,7 @@ namespace vmpattack
         {
             // Sanity check for potentially broken PEs.
             //
-            if ( image.raw_bytes.size() >= section.physical_address + section.physical_address )
+            if ( image.raw_bytes.size() >= section.physical_address + section.physical_size )
                 memcpy( &mapped_buffer[ section.virtual_address ], &image.raw_bytes[ section.physical_address ], section.physical_size );
         }
 
