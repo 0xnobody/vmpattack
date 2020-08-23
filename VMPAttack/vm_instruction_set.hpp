@@ -18,12 +18,20 @@ namespace vmpattack
         {
             std::unique_ptr<arithmetic_expression> operand_chain = std::make_unique<arithmetic_expression>();
 
-            vm_analysis_context stream_context = vm_analysis_context( stream, state );
-
             x86_reg pop_reg, operand_reg;
             int64_t pop_disp = 0;
             size_t pop_size, operand_size;
             size_t store_size;
+
+            // Copy so we don't corrupt the state.
+            //
+            instruction_stream copied_stream = *stream;
+            vm_analysis_context stream_context = vm_analysis_context( &copied_stream, state );
+
+            //
+            // There are 2 types of POPs. We must match for both.
+            // They are functionally the exact same, but perform different microcode in different orders.
+            //
 
             auto result = ( &stream_context )
                 // MOV(ZX) %pop_size:%pop_reg, [VSP]
@@ -41,7 +49,29 @@ namespace vmpattack
                 ->store_ctx( { pop_reg, true }, { store_size, false }, { operand_reg, true } );
 
             if ( !result )
-                return false;
+            {
+                // Refresh all objects.
+                //
+                copied_stream = *stream;
+                operand_chain = std::make_unique<arithmetic_expression>();
+
+                result = ( &stream_context )
+                    // MOV(ZX) %operand_reg, %operand_size:[VIP]
+                    ->fetch_vip( { operand_reg, false }, { operand_size, false } )
+                    ->record_encryption( operand_reg, operand_chain.get() )
+
+                    // MOV(ZX) %pop_size:%pop_reg, [VSP]
+                    ->fetch_vsp( { pop_reg, false }, { pop_size, false }, { pop_disp, true } )
+
+                    // ADD VSP, %pop_size
+                    ->add_vsp( { pop_size, true } )
+
+                    // MOV %store_size:[CTX + %operand_reg], [%pop_reg]
+                    ->store_ctx( { pop_reg, true }, { store_size, false }, { operand_reg, true } );
+
+                if ( !result )
+                    return false;
+            }
 
             vm_operand op = { vm_operand_reg, pop_size, operand_size };
             info->operands.push_back( { op, std::move( operand_chain ) } );
