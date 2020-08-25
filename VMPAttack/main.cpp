@@ -92,7 +92,7 @@ namespace vmpattack
                 log<CON_GRN>( "\t** Lifting success\r\n" );
                 lifted_routines.push_back( *routine );
 
-                std::string save_path = vtil::format::str( "%s\\0x%llx.vtil", output_path.string().c_str(), scan_result.rva );
+                std::string save_path = output_path / vtil::format::str( "0x%llx.vtil", scan_result.rva );
                 vtil::save_routine( *routine, save_path );
 
                 log<CON_GRN>( "\t** Unoptimized Saved to %s\r\n", save_path );
@@ -105,7 +105,7 @@ namespace vmpattack
                 vtil::debug::dump( *routine );
 #endif
 
-                std::string optimized_save_path = vtil::format::str( "%s\\0x%llx-Optimized.vtil", output_path.string().c_str(), scan_result.rva );
+                std::string optimized_save_path = output_path / vtil::format::str( "0x%llx-Optimized.vtil", scan_result.rva );
                 vtil::save_routine( *routine, optimized_save_path );
 
                 log<CON_GRN>( "\t** Optimized Saved to %s\r\n", save_path );
