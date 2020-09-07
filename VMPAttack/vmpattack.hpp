@@ -56,6 +56,11 @@ namespace vmpattack
         //
         std::optional<vtil::routine*> lift_internal( uint64_t rva, uint64_t stub, vtil::basic_block* block );
 
+        // Scans the given instruction vector for VM entries.
+        // Returns a list of results, of [root rva, lifting_job]
+        //
+        std::vector<scan_result> scan_for_vmentry( const std::vector<std::unique_ptr<instruction>>& instructions ) const;
+
     public:
         // Constructor.
         //
@@ -73,11 +78,16 @@ namespace vmpattack
 
         // Performs an analysis on the specified vmentry stub rva, returning relevant information.
         //
-        std::optional<vmentry_analysis_result> analyze_entry_stub( uint64_t rva );
+        std::optional<vmentry_analysis_result> analyze_entry_stub( uint64_t rva ) const;
 
         // Scans the given code section for VM entries.
         // Returns a list of results, of [root rva, lifting_job]
         //
-        std::vector<scan_result> scan_for_vmentry( const std::string& section_name );
+        std::vector<scan_result> scan_for_vmentry( const std::string& section_name ) const;
+
+        // Scans all executable sections for VM entries.
+        // Returns a list of results, of [root rva, lifting_job]
+        //
+        std::vector<scan_result> scan_for_vmentry() const;
     };
 }

@@ -500,7 +500,7 @@ namespace vmpattack
 
     // Performs an analysis on the specified vmentry stub rva, returning relevant information.
     //
-    std::optional<vmentry_analysis_result> vmpattack::analyze_entry_stub( uint64_t rva )
+    std::optional<vmentry_analysis_result> vmpattack::analyze_entry_stub( uint64_t rva ) const
     {
         // Disassemble at the specified rva, stopping at any branch.
         //
@@ -544,15 +544,20 @@ namespace vmpattack
 
         return vmentry_analysis_result{ { entry_stub, vmentry_rva } };
     }
+    
+    // Sanitize section strings to make them eligible for comparison with constants.
+    //
+    std::string sanitize_section_name( std::string name )
+    {
+        return std::string( name.c_str() );
+    };
 
-    // Scans the given code section for VM entries.
+    // Scans the given instruction vector for VM entries.
     // Returns a list of results, of [root rva, lifting_job]
     //
-    std::vector<scan_result> vmpattack::scan_for_vmentry( const std::string& section_name )
+    std::vector<scan_result> vmpattack::scan_for_vmentry( const std::vector<std::unique_ptr<instruction>>& instructions ) const
     {
         std::vector<scan_result> results = {};
-
-        std::optional<vtil::section_descriptor> target_section = {};
 
         std::vector<vtil::section_descriptor> potential_vmp_sections = {};
 
@@ -576,41 +581,15 @@ namespace vmpattack
             return false;
         };
 
-        // Sanitize section strings to make them eligible for comparison with constants.
-        //
-        auto sanitize_section_name = []( std::string name ) -> std::string
-        {
-            return std::string( name.c_str() );
-        };
-
         // Enumerate all sections.
         //
         for ( const vtil::section_descriptor& section : image )
-        {
-            std::string sanitized_name = sanitize_section_name( section.name );
-
-            if ( sanitized_name == section_name )
-            {
-                target_section = section;
-                continue;
-            }
-
-            if ( is_vmp_section( sanitized_name ) )
+            if ( is_vmp_section( sanitize_section_name( section.name ) ) )
                 potential_vmp_sections.push_back( section );
-        }
-
-        // Is the desired section was not found, return empty {}.
-        //
-        if ( !target_section )
-            return {};
-
-        // Get a vector of instructions in the .text section, starting from the very beginning.
-        //
-        std::vector<std::unique_ptr<instruction>> text_instructions = disassembler::get().disassembly_simple( image_base, target_section->virtual_address, target_section->virtual_address + target_section->virtual_size );
 
         // Iterate through each instruction.
         //
-        for ( const std::unique_ptr<instruction>& instruction : text_instructions )
+        for ( const std::unique_ptr<instruction>& instruction : instructions )
         {
             // If instruction is JMP IMM, follow it.
             //
@@ -637,6 +616,67 @@ namespace vmpattack
 
         // Return the accumulated scan results.
         //
+        return results;
+    }
+
+    // Scans the given code section for VM entries.
+    // Returns a list of results, of [root rva, lifting_job]
+    //
+    std::vector<scan_result> vmpattack::scan_for_vmentry( const std::string& section_name ) const
+    {
+        std::optional<vtil::section_descriptor> target_section = {};
+
+        std::string sanitized_section_name = sanitize_section_name( section_name );
+
+        // Find target section.
+        //
+        for ( const vtil::section_descriptor& section : image )
+        {
+            if ( sanitize_section_name( section.name ) == sanitized_section_name )
+            {
+                target_section = section;
+                break;
+            }
+        }
+
+        // Is the desired section was not found, return empty {}.
+        //
+        if ( !target_section )
+            return {};
+
+        // Get a vector of instructions in the .text section, starting from the very beginning.
+        //
+        std::vector<std::unique_ptr<instruction>> text_instructions = disassembler::get().disassembly_simple( image_base, target_section->virtual_address, target_section->virtual_address + target_section->virtual_size );
+
+        // Scan the retrieved instructions.
+        //
+        return scan_for_vmentry( text_instructions );
+    }
+
+    // Scans all executable sections for VM entries.
+    // Returns a list of results, of [root rva, lifting_job]
+    //
+    std::vector<scan_result> vmpattack::scan_for_vmentry() const
+    {
+        std::vector<scan_result> results = {};
+
+        // Enumerate all sections.
+        //
+        for ( const vtil::section_descriptor& section : image )
+        {
+            if ( section.execute )
+            {
+                // Get a vector of instructions in the .text section, starting from the very beginning.
+                //
+                std::vector<std::unique_ptr<instruction>> text_instructions = disassembler::get().disassembly_simple( image_base, section.virtual_address, section.virtual_address + section.virtual_size );
+
+                // Scan the retrieved instructions and concat the result.
+                //
+                std::vector<scan_result> section_results = scan_for_vmentry( text_instructions );
+                results.insert( results.end(), section_results.begin(), section_results.end() );
+            }
+        }
+
         return results;
     }
 }

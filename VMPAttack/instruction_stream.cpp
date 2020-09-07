@@ -14,7 +14,7 @@ namespace vmpattack
 
         // Fetch instruction.
         //
-        auto ins = instructions[ begin + index ];
+        auto& ins = instructions[ begin + index ];
 
         // Increment index.
         //

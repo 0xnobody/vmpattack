@@ -52,7 +52,7 @@ namespace vmpattack
 
     extern "C" int main( int argc, const char* args[])
     {
-        std::filesystem::path input_file_path = { args[ 1 ] };
+        std::filesystem::path input_file_path = { args[1] };
 
         // Create an output directory.
         //
@@ -69,8 +69,8 @@ namespace vmpattack
         log<CON_GRN>( "** Loaded raw image buffer @ 0x%p of size 0x%llx\r\n", buffer.data(), buffer.size() );
 
         vmpattack instance( buffer );
-
-        std::vector<scan_result> scan_results = instance.scan_for_vmentry( ".text" );
+        
+        std::vector<scan_result> scan_results = instance.scan_for_vmentry();
 
         log<CON_GRN>( "** Found %u virtualized routines:\r\n", scan_results.size() );
 
@@ -81,9 +81,11 @@ namespace vmpattack
 
         std::vector<vtil::routine*> lifted_routines;
 
+        int i = 0;
+
         for ( const scan_result& scan_result : scan_results )
         {
-            log<CON_YLW>( "** Devirtualizing routine @ 0x%llx...\r\n", scan_result.rva );
+            log<CON_YLW>( "** Devirtualizing routine %i/%i @ 0x%llx...\r\n", i + 1, scan_results.size(), scan_result.rva );
 
             std::optional<vtil::routine*> routine = instance.lift( scan_result.job );
 
@@ -112,6 +114,8 @@ namespace vmpattack
             }
             else
                 log<CON_RED>( "\t** Lifting failed\r\n" );
+
+            i++;
         }
 
         system( "pause" );
