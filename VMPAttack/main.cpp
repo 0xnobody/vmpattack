@@ -21,8 +21,8 @@ namespace vmpattack
 {
     using std::uint8_t;
 
-    template <typename T> 
-    auto read_file(std::string filepath) -> std::vector<T>
+    template <typename T = uint8_t> 
+    auto read_file(const char* filepath) -> std::vector<T>
     {
         std::ifstream file(filepath, std::ios::binary);
         std::vector<T> file_buf(std::istreambuf_iterator<char>(file), {});
